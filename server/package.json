@@ -1,0 +1,20 @@
+{
+  "name": "task-tracker-server",
+  "version": "1.0.0",
+  "description": "Express backend for the task tracker app",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.3",
+    "dotenv": "^16.4.1",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.1"
+  }
+}
