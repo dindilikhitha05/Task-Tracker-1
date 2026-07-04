@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/tasks';
+const API_URL = process.env.REACT_APP_API_URL || 'https://task-tracker-o168.onrender.com/api/tasks';
 
 /**
  * Fetches all tasks from the backend API.
