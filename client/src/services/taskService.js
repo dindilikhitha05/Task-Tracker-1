@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://task-tracker-o168.onrender.com/api/tasks';
+// Use REACT_APP_API_URL as the base (CRA). Fallback to the original deployed API.
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://task-tracker-o168.onrender.com';
+const API_URL = `${BASE_URL.replace(/\/$/, '')}/api/tasks`;
 
 /**
  * Fetches all tasks from the backend API.
