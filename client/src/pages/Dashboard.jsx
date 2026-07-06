@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
-import { createTask, deleteTask, getAllTasks, updateTask } from '../services/taskService';
-import filterTasks from '../utils/filterTasks';
+import { createTask, deleteTask, getAllTasks, updateTask } from '../services/task-service';
+import filterTasks from '../utils/filter-tasks';
 
 /**
  * Main dashboard page for the task tracker application.
