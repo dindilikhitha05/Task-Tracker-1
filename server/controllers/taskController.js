@@ -46,7 +46,7 @@ const getTaskById = async (req, res, next) => {
  */
 const createTask = async (req, res, next) => {
   try {
-    const { title, description, status } = req.body;
+    const { title, description, status, priority, dueDate } = req.body;
 
     if (!title || title.trim() === '') {
       res.status(400);
@@ -57,6 +57,8 @@ const createTask = async (req, res, next) => {
       title: title.trim(),
       description: description?.trim() || '',
       status: status || 'pending',
+      priority: ['low', 'medium', 'high'].includes(priority) ? priority : 'medium',
+      dueDate: dueDate ? new Date(dueDate) : null,
     });
 
     res.status(201).json(task);
@@ -74,7 +76,7 @@ const createTask = async (req, res, next) => {
  */
 const updateTask = async (req, res, next) => {
   try {
-    const { title, description, status } = req.body;
+    const { title, description, status, priority, dueDate } = req.body;
 
     if (!title || title.trim() === '') {
       res.status(400);
@@ -90,6 +92,8 @@ const updateTask = async (req, res, next) => {
     task.title = title.trim();
     task.description = description?.trim() || '';
     task.status = status || task.status;
+    task.priority = ['low', 'medium', 'high'].includes(priority) ? priority : task.priority;
+    task.dueDate = dueDate ? new Date(dueDate) : null;
     const updatedTask = await task.save();
 
     res.status(200).json(updatedTask);

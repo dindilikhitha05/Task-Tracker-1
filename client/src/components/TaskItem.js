@@ -1,18 +1,18 @@
 import React from 'react';
+import { formatDateLabel, isTaskOverdue } from '../utils/date-utils';
 
 /**
- * Renders a single task row with action buttons.
- * @param {object} props - Component props.
- * @param {object} props.task - Task object.
+ * Renders a single task card with action buttons.
+ * @param {Object} props - Component props.
+ * @param {Object} props.task - The task to render.
  * @param {Function} props.onEdit - Callback for editing the task.
  * @param {Function} props.onDelete - Callback for deleting the task.
- * @param {Function} props.onToggleStatus - Callback for toggling task completion.
- * @returns {JSX.Element} The task item UI.
+ * @param {Function} props.onToggleStatus - Callback for toggling task status.
+ * @returns {JSX.Element} The task card UI.
  */
 function TaskItem({ task, onEdit, onDelete, onToggleStatus }) {
   const priority = task.priority || 'medium';
-  const isOverdue =
-    task.dueDate && task.status !== 'completed' && new Date(task.dueDate) < new Date(new Date().setHours(0, 0, 0, 0));
+  const overdue = isTaskOverdue(task);
 
   const priorityClasses = {
     low: 'bg-emerald-100 text-emerald-700',
@@ -27,7 +27,7 @@ function TaskItem({ task, onEdit, onDelete, onToggleStatus }) {
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <h3 className="text-lg font-semibold text-slate-800">{task.title}</h3>
             <span
-              className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
                 task.status === 'completed'
                   ? 'bg-emerald-100 text-emerald-700'
                   : 'bg-amber-100 text-amber-700'
@@ -35,18 +35,18 @@ function TaskItem({ task, onEdit, onDelete, onToggleStatus }) {
             >
               {task.status === 'completed' ? 'Completed' : 'Pending'}
             </span>
-            <span className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${priorityClasses[priority]}`}>
+            <span className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${priorityClasses[priority]}`}>
               {priority} priority
             </span>
           </div>
           {task.description ? <p className="text-sm text-slate-600">{task.description}</p> : null}
           {task.dueDate ? (
-            <p className={`mt-2 text-sm ${isOverdue ? 'text-rose-600' : 'text-slate-500'}`}>
-              {isOverdue ? 'Overdue' : 'Due'} {new Date(task.dueDate).toLocaleDateString()}
+            <p className={`mt-2 text-sm ${overdue ? 'text-rose-600' : 'text-slate-500'}`}>
+              {overdue ? 'Overdue' : 'Due'} {formatDateLabel(task.dueDate)}
             </p>
           ) : null}
           <p className="mt-2 text-xs text-slate-400">
-            Created {new Date(task.createdAt).toLocaleDateString()}
+            Created {formatDateLabel(task.createdAt)}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

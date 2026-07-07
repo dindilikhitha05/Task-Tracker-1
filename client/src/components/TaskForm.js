@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 /**
- * Renders the task form for adding or editing a task.
- * @param {object} props - Component props.
- * @param {object|null} props.task - Task currently being edited.
- * @param {Function} props.onSubmit - Callback when the form is submitted.
- * @param {Function} props.onCancel - Callback when edit is canceled.
+ * Renders the form used to create or edit a task.
+ * @param {Object} props - Component props.
+ * @param {Object|null} props.task - The task being edited.
+ * @param {Function} props.onSubmit - Callback invoked on form submission.
+ * @param {Function} props.onCancel - Callback invoked when editing is canceled.
  * @returns {JSX.Element} The task form UI.
  */
 function TaskForm({ task, onSubmit, onCancel }) {
@@ -16,6 +16,11 @@ function TaskForm({ task, onSubmit, onCancel }) {
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
 
+  /**
+   * Formats a date value for the HTML date input.
+   * @param {string|Date|null} value - The date to convert.
+   * @returns {string} The formatted date string.
+   */
   const formatDateForInput = (value) => {
     if (!value) return '';
     const date = new Date(value);
@@ -40,8 +45,8 @@ function TaskForm({ task, onSubmit, onCancel }) {
   }, [task]);
 
   /**
-   * Handles form submission and validates input.
-   * @param {object} event - Form submit event.
+   * Handles form submission and validates the task title.
+   * @param {Object} event - The form submit event.
    * @returns {void}
    */
   const handleSubmit = (event) => {
@@ -78,7 +83,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
         <textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+          className="w-full rounded-xl border border-border px-3 py-2 outline-none focus:border-grad-start"
           rows="3"
           placeholder="Add some notes"
         />
@@ -89,7 +94,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+            className="w-full rounded-xl border border-border px-3 py-2 outline-none focus:border-grad-start"
           >
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
@@ -100,7 +105,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
           <select
             value={priority}
             onChange={(event) => setPriority(event.target.value)}
-            className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+            className="w-full rounded-xl border border-border px-3 py-2 outline-none focus:border-grad-start"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -114,7 +119,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
           type="date"
           value={dueDate}
           onChange={(event) => setDueDate(event.target.value)}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+          className="w-full rounded-xl border border-border px-3 py-2 outline-none focus:border-grad-start"
         />
       </div>
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import FilterTabs from '../components/FilterTabs';
+import ProgressBar from '../components/ProgressBar';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import { createTask, deleteTask, getAllTasks, updateTask } from '../services/task-service';
@@ -17,8 +19,8 @@ function Dashboard() {
   const [error, setError] = useState('');
 
   /**
-   * Loads all tasks from the backend.
-   * @returns {Promise<void>}
+   * Loads tasks from the backend.
+   * @returns {Promise<void>} Resolves once the task list is loaded.
    */
   const fetchTasks = async () => {
     try {
@@ -38,9 +40,9 @@ function Dashboard() {
   }, []);
 
   /**
-   * Handles submission for creating or updating a task.
-   * @param {object} taskData - Task payload.
-   * @returns {Promise<void>}
+   * Creates or updates a task based on the current selection.
+   * @param {Object} taskData - The task fields to submit.
+   * @returns {Promise<void>} Resolves after the request completes.
    */
   const handleSubmit = async (taskData) => {
     try {
@@ -59,8 +61,8 @@ function Dashboard() {
 
   /**
    * Toggles a task between pending and completed states.
-   * @param {object} task - Task object.
-   * @returns {Promise<void>}
+   * @param {Object} task - The task to update.
+   * @returns {Promise<void>} Resolves after the status update completes.
    */
   const handleToggleStatus = async (task) => {
     try {
@@ -74,8 +76,8 @@ function Dashboard() {
 
   /**
    * Deletes a task by ID.
-   * @param {string} taskId - Task identifier.
-   * @returns {Promise<void>}
+   * @param {string} taskId - The task identifier.
+   * @returns {Promise<void>} Resolves after the delete request completes.
    */
   const handleDelete = async (taskId) => {
     try {
@@ -91,11 +93,8 @@ function Dashboard() {
     total: tasks.length,
     completed: tasks.filter((task) => task.status === 'completed').length,
     pending: tasks.filter((task) => task.status !== 'completed').length,
-    overdue: tasks.filter((task) => {
-      if (!task.dueDate || task.status === 'completed') return false;
-      return new Date(task.dueDate) < new Date(new Date().setHours(0, 0, 0, 0));
-    }).length,
   };
+  const progressPercent = tasks.length ? Math.round((stats.completed / tasks.length) * 100) : 0;
 
   const sortedTasks = [...visibleTasks].sort((a, b) => {
     if (sortBy === 'priority') {
@@ -118,7 +117,7 @@ function Dashboard() {
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <header className="rounded-3xl bg-gradient-to-r from-indigo-600 to-sky-500 p-6 text-white shadow-lg sm:p-8">
           <p className="text-sm uppercase tracking-[0.3em] text-indigo-100">Task Tracker</p>
-          <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Stay on top of your work</h1>
+          <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Track your daily tasks in one place</h1>
           <p className="mt-3 max-w-2xl text-sm text-indigo-100 sm:text-base">
             Create, organize, and track progress across your daily tasks with a simple dashboard.
           </p>
@@ -131,35 +130,26 @@ function Dashboard() {
                 <h2 className="text-xl font-semibold">Task Overview</h2>
                 <p className="text-sm text-slate-500">Filter by progress and keep key work moving.</p>
               </div>
-              <div className="flex flex-wrap items-center justify-end gap-2">
-                {['all', 'completed', 'pending'].map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => setFilter(option)}
-                    className={`rounded-full px-3 py-2 text-sm font-medium transition ${
-                      filter === option
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </button>
-                ))}
+              <div className="flex items-center justify-end">
+                <FilterTabs activeFilter={filter} onFilterChange={setFilter} />
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-3">
               {[
                 { label: 'Total', value: stats.total },
                 { label: 'Completed', value: stats.completed },
                 { label: 'Pending', value: stats.pending },
-                { label: 'Overdue', value: stats.overdue },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
                   <p className="text-sm text-slate-500">{item.label}</p>
                   <p className="mt-1 text-xl font-semibold text-slate-800">{item.value}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <ProgressBar value={progressPercent} />
             </div>
 
             <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
