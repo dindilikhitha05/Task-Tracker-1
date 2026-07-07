@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-// Use REACT_APP_API_URL as the base (CRA). Fallback to the original deployed API.
-const BASE_URL = process.env.REACT_APP_API_URL || 'https://task-tracker-o168.onrender.com';
+// Use the local API in development so new fields match the current backend code.
+const DEFAULT_API_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000'
+    : 'https://task-tracker-o168.onrender.com';
+const BASE_URL = process.env.REACT_APP_API_URL || DEFAULT_API_URL;
 const API_URL = `${BASE_URL.replace(/\/$/, '')}/api/tasks`;
 
 const normalizeTaskPayload = (taskData = {}) => ({

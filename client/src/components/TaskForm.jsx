@@ -23,6 +23,14 @@ function TaskForm({ task, onSubmit, onCancel }) {
     return date.toISOString().split('T')[0];
   };
 
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setStatus('pending');
+    setPriority('medium');
+    setDueDate('');
+  };
+
   useEffect(() => {
     if (task) {
       setTitle(task.title || '');
@@ -31,20 +39,16 @@ function TaskForm({ task, onSubmit, onCancel }) {
       setPriority(task.priority || 'medium');
       setDueDate(formatDateForInput(task.dueDate));
     } else {
-      setTitle('');
-      setDescription('');
-      setStatus('pending');
-      setPriority('medium');
-      setDueDate('');
+      resetForm();
     }
   }, [task]);
 
   /**
    * Handles form submission and validates input.
    * @param {object} event - Form submit event.
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -53,13 +57,17 @@ function TaskForm({ task, onSubmit, onCancel }) {
     }
 
     setError('');
-    onSubmit({
+    await onSubmit({
       title: title.trim(),
       description: description.trim(),
       status,
       priority,
       dueDate: dueDate || null,
     });
+
+    if (!task) {
+      resetForm();
+    }
   };
 
   return (
@@ -69,7 +77,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
         <input
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 placeholder:text-gray-400 outline-none focus:border-indigo-500 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)]"
           placeholder="Enter task title"
         />
       </div>
@@ -78,7 +86,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
         <textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 placeholder:text-gray-400 outline-none focus:border-indigo-500 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)]"
           rows="3"
           placeholder="Add some notes"
         />
