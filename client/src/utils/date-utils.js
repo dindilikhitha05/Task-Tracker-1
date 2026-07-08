@@ -22,6 +22,7 @@ const isTaskOverdue = (task) => {
 
   const dueDate = new Date(task.dueDate);
   const today = new Date();
+  // Compare against the start of today so tasks due today are not overdue.
   today.setHours(0, 0, 0, 0);
 
   return dueDate < today;

@@ -57,6 +57,7 @@ const createTask = async (req, res, next) => {
       title: title.trim(),
       description: description?.trim() || '',
       status: status || 'pending',
+      // Fall back to medium if the client sends an unsupported priority.
       priority: ['low', 'medium', 'high'].includes(priority) ? priority : 'medium',
       dueDate: dueDate ? new Date(dueDate) : null,
     });
@@ -92,6 +93,7 @@ const updateTask = async (req, res, next) => {
     task.title = title.trim();
     task.description = description?.trim() || '';
     task.status = status || task.status;
+    // Keep the previous priority if the update payload is invalid.
     task.priority = ['low', 'medium', 'high'].includes(priority) ? priority : task.priority;
     task.dueDate = dueDate ? new Date(dueDate) : null;
     const updatedTask = await task.save();

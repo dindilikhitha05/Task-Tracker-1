@@ -16,6 +16,11 @@ function TaskForm({ task, onSubmit, onCancel }) {
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
 
+  /**
+   * Formats a date value for the HTML date input.
+   * @param {string|Date|null} value - The date to convert.
+   * @returns {string} The formatted date string.
+   */
   const formatDateForInput = (value) => {
     if (!value) return '';
     const date = new Date(value);

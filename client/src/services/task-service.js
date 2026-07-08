@@ -8,12 +8,22 @@ const DEFAULT_API_URL =
 const BASE_URL = process.env.REACT_APP_API_URL || DEFAULT_API_URL;
 const API_URL = `${BASE_URL.replace(/\/$/, '')}/api/tasks`;
 
+/**
+ * Normalizes task form data before sending it to the API.
+ * @param {object} taskData - Raw task payload from the UI.
+ * @returns {object} API-ready task payload.
+ */
 const normalizeTaskPayload = (taskData = {}) => ({
   ...taskData,
   priority: taskData.priority || 'medium',
   dueDate: taskData.dueDate || null,
 });
 
+/**
+ * Normalizes API task responses for fields the UI expects.
+ * @param {object} task - Task returned from the backend.
+ * @returns {object} Normalized task object.
+ */
 const normalizeTask = (task) => ({
   ...task,
   priority: task.priority || 'medium',
@@ -27,6 +37,7 @@ const normalizeTask = (task) => ({
 const getAllTasks = async () => {
   try {
     const response = await axios.get(API_URL);
+    // Older records may not have newer optional fields, so normalize every task.
     return response.data.map(normalizeTask);
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Unable to fetch tasks');

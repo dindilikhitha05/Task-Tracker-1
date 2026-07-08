@@ -7,6 +7,7 @@
  * @returns {Array<object>} Filtered list of tasks.
  */
 const filterTasks = (tasks, filter) => {
+  // Apply only status filters; the "all" tab returns the original list.
   if (filter === 'completed') {
     return tasks.filter((task) => task.status === 'completed');
   }

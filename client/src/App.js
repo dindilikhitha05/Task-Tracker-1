@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard.jsx';
 
 /**
  * Root application component that renders the dashboard page.

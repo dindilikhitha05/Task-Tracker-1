@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import TaskForm from '../components/TaskForm';
-import TaskList from '../components/TaskList';
+import TaskForm from '../components/TaskForm.jsx';
+import TaskList from '../components/TaskList.jsx';
 import { createTask, deleteTask, getAllTasks, updateTask } from '../services/task-service';
 import filterTasks from '../utils/filter-tasks';
 
@@ -98,11 +98,13 @@ function Dashboard() {
   };
 
   const sortedTasks = [...visibleTasks].sort((a, b) => {
+    // Keep urgent tasks first when sorting by priority.
     if (sortBy === 'priority') {
       const priorityRank = { high: 0, medium: 1, low: 2 };
       return (priorityRank[a.priority || 'medium'] ?? 1) - (priorityRank[b.priority || 'medium'] ?? 1);
     }
 
+    // Tasks without due dates are placed after dated tasks.
     if (sortBy === 'dueDate') {
       if (!a.dueDate && !b.dueDate) return 0;
       if (!a.dueDate) return 1;
