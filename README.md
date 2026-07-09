@@ -145,3 +145,5 @@ Available endpoints:
 - `DELETE /api/tasks/:id`
 
 <!-- updated -->
+
+<!-- fix commit 2 -->
