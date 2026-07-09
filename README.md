@@ -143,3 +143,5 @@ Available endpoints:
 - `POST /api/tasks`
 - `PUT /api/tasks/:id`
 - `DELETE /api/tasks/:id`
+
+<!-- updated -->
